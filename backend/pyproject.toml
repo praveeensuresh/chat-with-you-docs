@@ -1,0 +1,33 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.121.0",
+    "fastapi>=0.141.1",
+    "langchain-anthropic>=1.5.4",
+    "langchain-core>=1.5.3",
+    "langgraph>=1.2.10",
+    "pydantic-settings>=2.15.0",
+    "pypdf>=6.15.0",
+    "python-multipart>=0.0.32",
+    "qdrant-client>=1.19.0",
+    "sentence-transformers>=5.7.0",
+    "torch>=2.6",
+    "uvicorn[standard]>=0.52.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.2",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
