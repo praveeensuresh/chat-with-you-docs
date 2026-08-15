@@ -8,6 +8,7 @@ dependencies = [
     "fastapi>=0.141.1",
     "langchain-anthropic>=1.5.4",
     "langchain-core>=1.5.3",
+    "langchain-text-splitters>=1.1.2",
     "langgraph>=1.2.10",
     "pydantic-settings>=2.15.0",
     "pypdf>=6.15.0",
