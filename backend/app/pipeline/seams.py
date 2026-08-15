@@ -28,6 +28,14 @@ class SearchResult:
     score: float
 
 
+@dataclass
+class Hit:
+    text: str
+    document_name: str
+    page: int
+    score: float
+
+
 class Embedder(Protocol):
     def embed_passages(self, texts: list[str]) -> list[list[float]]: ...
 
