@@ -1,0 +1,22 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: chat-with-docs-qdrant
+    ports:
+      - "6333:6333" 
+      - "6334:6334" 
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+
+  backend:
+    build: ./backend
+    container_name: chat-with-docs-backend
+    ports:
+      - "8000:8000" 
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+    env_file:
+      - path: backend/.env
+        required: false
+    depends_on:
+      - qdrant
