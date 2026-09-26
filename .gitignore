@@ -38,3 +38,11 @@ qdrant_storage/
 frontend/AGENTS.md
 CLAUDE.md
 docs/agents/
+teach/
+notes.md
+
+/graft/
+.claude/
+AGENTS.md
+.mcp.json
+.ignore

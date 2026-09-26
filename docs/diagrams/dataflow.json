@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Chat With Your Docs - How Data Moves",
+    "output": "dataflow.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "storing",
+        "label": "Storing a PDF",
+        "focus": [
+          "pdf",
+          "pages",
+          "chunks",
+          "passage_vectors",
+          "qdrant"
+        ],
+        "note": "Top row: a PDF becomes many small pieces of text with numbers attached."
+      },
+      {
+        "id": "asking",
+        "label": "Asking a question",
+        "focus": [
+          "question",
+          "query_vector",
+          "qdrant",
+          "ranked",
+          "terminal"
+        ],
+        "note": "Bottom row: a question becomes numbers, and the closest stored pieces come back."
+      }
+    ],
+    "viewBox": [
+      1068,
+      560
+    ]
+  },
+  "stages": [
+    {
+      "label": "1. Input"
+    },
+    {
+      "label": "2. Cut up"
+    },
+    {
+      "label": "3. Turn into numbers"
+    },
+    {
+      "label": "4. Store or find"
+    },
+    {
+      "label": "5. Output"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pdf",
+      "type": "external",
+      "label": "PDF file",
+      "sublabel": "on your computer",
+      "stage": 0,
+      "row": 0,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "pages",
+      "type": "backend",
+      "label": "Page text",
+      "sublabel": "pypdf, one per page",
+      "stage": 1,
+      "row": 0,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "chunks",
+      "type": "backend",
+      "label": "Chunks",
+      "sublabel": "800 chars, 150 overlap",
+      "tag": "keeps page number",
+      "stage": 2,
+      "row": 0,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "passage_vectors",
+      "type": "backend",
+      "label": "Passage vectors",
+      "sublabel": "prefix: passage:",
+      "tag": "768 numbers each",
+      "stage": 3,
+      "row": 0,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "e5",
+      "type": "backend",
+      "label": "E5 model",
+      "sublabel": "intfloat/e5-base",
+      "brand": "hugging-face",
+      "stage": 2,
+      "row": 1,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "qdrant",
+      "type": "database",
+      "label": "Qdrant",
+      "sublabel": "vector database :6333",
+      "tag": "cosine distance",
+      "stage": 3,
+      "row": 1,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "question",
+      "type": "external",
+      "label": "Your question",
+      "sublabel": "typed in the terminal",
+      "stage": 0,
+      "row": 2,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "query_vector",
+      "type": "backend",
+      "label": "Query vector",
+      "sublabel": "prefix: query:",
+      "tag": "768 numbers",
+      "stage": 2,
+      "row": 2,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "ranked",
+      "type": "backend",
+      "label": "Top matches",
+      "sublabel": "sorted, best score first",
+      "stage": 3,
+      "row": 2,
+      "width": 150,
+      "height": 64
+    },
+    {
+      "id": "terminal",
+      "type": "external",
+      "label": "Printed answer text",
+      "sublabel": "name, page, text",
+      "stage": 4,
+      "row": 2,
+      "width": 150,
+      "height": 64
+    }
+  ],
+  "flows": [
+    {
+      "id": "f-pdf-pages",
+      "from": "pdf",
+      "to": "pages",
+      "label": "read every page",
+      "variant": "emphasis",
+      "labelAt": [
+        208,
+        120
+      ]
+    },
+    {
+      "id": "f-pages-chunks",
+      "from": "pages",
+      "to": "chunks",
+      "label": "split long text",
+      "labelAt": [
+        423,
+        120
+      ]
+    },
+    {
+      "id": "f-chunks-vec",
+      "from": "chunks",
+      "to": "passage_vectors",
+      "label": "send chunk texts",
+      "labelAt": [
+        638,
+        120
+      ]
+    },
+    {
+      "id": "f-vec-qdrant",
+      "from": "passage_vectors",
+      "to": "qdrant",
+      "label": "delete old, then save",
+      "variant": "emphasis",
+      "labelAt": [
+        745,
+        120
+      ]
+    },
+    {
+      "id": "f-q-qvec",
+      "from": "question",
+      "to": "query_vector",
+      "label": "send question text"
+    },
+    {
+      "id": "f-qvec-qdrant",
+      "from": "query_vector",
+      "to": "qdrant",
+      "label": "find nearest vectors",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f-qdrant-ranked",
+      "from": "qdrant",
+      "to": "ranked",
+      "label": "top 5",
+      "labelAt": [
+        880,
+        320
+      ]
+    },
+    {
+      "id": "f-ranked-term",
+      "from": "ranked",
+      "to": "terminal",
+      "label": "show text and page",
+      "variant": "emphasis",
+      "labelAt": [
+        853,
+        348
+      ]
+    },
+    {
+      "id": "f-e5-passage",
+      "from": "e5",
+      "to": "passage_vectors",
+      "label": "makes the numbers",
+      "variant": "dashed"
+    },
+    {
+      "id": "f-e5-query",
+      "from": "e5",
+      "to": "query_vector",
+      "label": "same model",
+      "variant": "dashed",
+      "labelAt": [
+        530,
+        325
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Same model, two prefixes",
+      "items": [
+        "Stored text gets the prefix passage:, a question gets query:.",
+        "Same model both times. Wrong prefix means worse matches."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Chunks and re-storing",
+      "items": [
+        "Chunks are 800 characters with 150 of overlap, so a split sentence stays whole.",
+        "delete_by_document runs before saving, so one file is never stored twice."
+      ]
+    }
+  ]
+}

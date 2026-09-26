@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chat With Your Docs - What Runs Today",
+    "output": "architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/praveeensuresh/chat-with-you-docs",
+      "revision": "e711d5b099af7d046a7479615d9ab2e023c2b404"
+    },
+    "viewBox": [
+      1320,
+      690
+    ],
+    "views": [
+      {
+        "id": "store-a-pdf",
+        "label": "Store a PDF",
+        "focus": [
+          "cli",
+          "ingest",
+          "embedder_seam",
+          "store_seam",
+          "e5",
+          "qdrant"
+        ],
+        "note": "The path a PDF takes from your terminal into the vector database."
+      },
+      {
+        "id": "ask-a-question",
+        "label": "Ask a question",
+        "focus": [
+          "cli",
+          "search",
+          "embedder_seam",
+          "store_seam",
+          "e5",
+          "qdrant"
+        ],
+        "note": "The path a question takes to find matching pieces of text."
+      },
+      {
+        "id": "swappable-parts",
+        "label": "Swappable parts",
+        "focus": [
+          "ingest",
+          "search",
+          "embedder_seam",
+          "store_seam",
+          "e5",
+          "qdrant_store",
+          "fakes"
+        ],
+        "note": "Both seams accept a real adapter or a fake. The pipeline cannot tell them apart."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "cli",
+      "type": "external",
+      "label": "Terminal",
+      "sublabel": "Typer CLI",
+      "tag": "ingest / search / reset",
+      "pos": [
+        60,
+        300
+      ],
+      "size": [
+        160,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/cli.py",
+          "line": 26,
+          "label": "commands"
+        }
+      ]
+    },
+    {
+      "id": "ingest",
+      "type": "backend",
+      "label": "Ingest",
+      "sublabel": "read PDF, cut, store",
+      "brand": "python",
+      "pos": [
+        300,
+        180
+      ],
+      "size": [
+        170,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/ingest.py",
+          "line": 20,
+          "label": "ingest()"
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "type": "backend",
+      "label": "Search",
+      "sublabel": "ask, rank, return",
+      "brand": "python",
+      "pos": [
+        300,
+        420
+      ],
+      "size": [
+        170,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/search.py",
+          "line": 6,
+          "label": "search()"
+        }
+      ]
+    },
+    {
+      "id": "embedder_seam",
+      "type": "backend",
+      "label": "Embedder",
+      "sublabel": "text to numbers",
+      "tag": "Protocol",
+      "pos": [
+        560,
+        180
+      ],
+      "size": [
+        175,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/seams.py",
+          "line": 38,
+          "label": "Protocol"
+        }
+      ]
+    },
+    {
+      "id": "store_seam",
+      "type": "backend",
+      "label": "VectorStore",
+      "sublabel": "save and find",
+      "tag": "Protocol",
+      "pos": [
+        560,
+        420
+      ],
+      "size": [
+        175,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/seams.py",
+          "line": 44,
+          "label": "Protocol"
+        }
+      ]
+    },
+    {
+      "id": "e5",
+      "type": "backend",
+      "label": "E5Embedder",
+      "sublabel": "sentence-transformers",
+      "brand": "hugging-face",
+      "pos": [
+        830,
+        180
+      ],
+      "size": [
+        180,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/adapters.py",
+          "line": 20,
+          "label": "real embedder"
+        }
+      ]
+    },
+    {
+      "id": "qdrant_store",
+      "type": "backend",
+      "label": "QdrantStore",
+      "sublabel": "qdrant-client",
+      "pos": [
+        830,
+        420
+      ],
+      "size": [
+        180,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/adapters.py",
+          "line": 33,
+          "label": "real store"
+        }
+      ]
+    },
+    {
+      "id": "fakes",
+      "type": "backend",
+      "label": "Fakes",
+      "sublabel": "used by tests only",
+      "pos": [
+        830,
+        580
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "backend/app/pipeline/fakes.py",
+          "label": "test doubles"
+        }
+      ]
+    },
+    {
+      "id": "qdrant",
+      "type": "database",
+      "label": "Qdrant",
+      "sublabel": "vector database :6333",
+      "tag": "768-d cosine",
+      "pos": [
+        1100,
+        420
+      ],
+      "size": [
+        160,
+        80
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "FastAPI",
+      "sublabel": "only /health today",
+      "brand": "fastapi",
+      "pos": [
+        1100,
+        180
+      ],
+      "size": [
+        160,
+        80
+      ],
+      "sources": [
+        {
+          "path": "backend/app/main.py",
+          "line": 19,
+          "label": "health route"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "cli-ingest",
+      "from": "cli",
+      "to": "ingest",
+      "label": "PDF path",
+      "variant": "emphasis"
+    },
+    {
+      "id": "cli-search",
+      "from": "cli",
+      "to": "search",
+      "label": "question text",
+      "variant": "emphasis"
+    },
+    {
+      "id": "ingest-embedder",
+      "from": "ingest",
+      "to": "embedder_seam",
+      "label": "chunk texts"
+    },
+    {
+      "id": "search-store",
+      "from": "search",
+      "to": "store_seam",
+      "label": "query vector"
+    },
+    {
+      "id": "embedder-e5",
+      "from": "embedder_seam",
+      "to": "e5",
+      "label": "real part",
+      "variant": "dashed"
+    },
+    {
+      "id": "store-qdrant",
+      "from": "store_seam",
+      "to": "qdrant_store",
+      "label": "real part",
+      "variant": "dashed"
+    },
+    {
+      "id": "store-fakes",
+      "from": "store_seam",
+      "to": "fakes",
+      "label": "test part",
+      "variant": "dashed"
+    },
+    {
+      "id": "qdrantstore-qdrant",
+      "from": "qdrant_store",
+      "to": "qdrant",
+      "label": "save and find vectors",
+      "variant": "emphasis",
+      "labelDy": 64
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "How to run it",
+      "items": [
+        "uv run cli ingest mydoc.pdf",
+        "uv run cli search \"my question\"",
+        "uv run cli reset"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Why the two Protocol boxes",
+      "items": [
+        "Embedder and VectorStore are Protocols: method names only, no code inside.",
+        "Both Ingest and Search use both seams.",
+        "Tests hand over fakes.py; the CLI hands over adapters.py. (ADR-0005)"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Not built yet",
+      "items": [
+        "Frontend is still the Next.js starter; FastAPI answers /health only.",
+        "No Claude call yet: matching text is found, answers are not written."
+      ]
+    }
+  ]
+}
