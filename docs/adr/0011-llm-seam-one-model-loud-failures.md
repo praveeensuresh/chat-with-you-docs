@@ -29,7 +29,7 @@ prompt it was given.
   `claude-sonnet-5`.
 - **Failures raise.** No retries, no catching. The command-line loop prints the error and
   stays open.
-- **A `max_tokens` ceiling** on the answer call, and the token counts from each reply ride
+- **An `answer_max_tokens` ceiling** on the answer call, and the token counts from each reply ride
   on the Answer so each turn's cost can be printed.
 
 The real adapter, the fake and the slot live beside the existing ones: slots in the seams

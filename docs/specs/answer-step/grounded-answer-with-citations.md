@@ -111,7 +111,11 @@ later web page and the eval script reuse the same function.
 - **Answer core** — a third front door, `answer`, beside `ingest` and `search`. It takes
   the question, the recent Turns, the three seams and a result count, and returns an
   Answer. Hides: the search call, prompt building, the Claude call, marker parsing,
-  Citation building, and the follow-up rewrite.
+  Citation building, and the follow-up rewrite. The embedder and the store are pass-through
+  arguments — `answer` only hands them to `search`. That is deliberate: bundling them
+  behind one slot would create a seam with a single filler, which ADR-0005 forbids.
+  The Answer is a plain dataclass; no LangGraph state object or Anthropic type is ever
+  returned, so no caller gains a dependency on either.
 - **LLM adapter** — the real Claude adapter, added beside the existing embedder and store
   adapters.
 - **LLM fake** — an in-memory fake with scripted replies that records the prompts it was
@@ -143,8 +147,8 @@ for that turn. The loop keeps the Turns in memory and ends on `exit`.
 
 ### Configuration
 
-Two new settings: `answer_model` and `max_tokens`. The existing `anthropic_api_key` is
-already present and becomes required to run the answer path.
+Two new settings: `answer_model` and `answer_max_tokens`. The existing `anthropic_api_key`
+is already present and becomes required to run the answer path.
 
 ### Dependencies
 
@@ -189,13 +193,19 @@ Test cases:
   earlier Turns.
 - The search runs on the rewritten question, not the raw follow-up.
 - Only the last 6 Turns reach the rewrite prompt.
-- The numbered Chunks in the prompt carry their Document name and page.
+- The numbered Chunks in the prompt carry their Document name and page. Prompt assertions
+  check that the prompt *contains* the expected facts, never its exact wording, so that
+  improving the prompt does not break tests while behaviour is unchanged.
 - `top_k` is honoured when passed.
 - Token counts from the reply appear on the Answer.
 - A Claude failure is raised, not swallowed.
 
-The real Claude adapter is not unit tested; it is proven by running `chat` against a real
-Document (ticket 1 of this spec).
+The real Claude adapter is unit tested the same way Week 1 tests its real adapters: patch
+the Anthropic client and assert the adapter sends the configured model and token ceiling,
+and reads the reply text and the token counts from the right fields. No network, no cost.
+That catches the mapping bugs a fake cannot, which is exactly why `test_adapters.py` exists
+for the embedder and the store. End to end against a real Document stays part of ticket 1
+as well, because only a real call proves the model id is accepted.
 
 ## Out of Scope
 
