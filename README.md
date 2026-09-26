@@ -227,3 +227,17 @@ backend/
 frontend/               # Next.js UI (coming later)
 docker-compose.yml      # Runs Qdrant locally
 ```
+
+---
+
+## Diagrams and decisions
+
+Open these in a browser to see the system as a picture:
+
+- [Architecture](docs/diagrams/architecture.html) — the parts and how they connect.
+- [Data flow](docs/diagrams/dataflow.html) — a PDF's path from file to stored Chunk, and a question's path to its Hits.
+
+The written record lives beside them:
+
+- [`CONTEXT.md`](CONTEXT.md) — what each word in this project means.
+- [`docs/adr/`](docs/adr/README.md) — every decision, why it was made, and what was rejected.

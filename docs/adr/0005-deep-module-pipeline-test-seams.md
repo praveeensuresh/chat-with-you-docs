@@ -13,11 +13,12 @@ for reasons unrelated to our code.
 
 ## Decision
 
-Put the real work behind two small front doors: `ingest(pdf_path)` and
-`search(question, top_k)`. The command line now, and the web page later, are thin
-wrappers that call these same two functions. Put a seam (a swappable slot) in
-front of the embedding model and in front of the Qdrant store. The running app
-plugs in the real `e5-base` and real Qdrant; tests plug in fast in-memory fakes.
+Put the real work behind two small front doors, `ingest` and `search`. The command
+line now, and the web page later, are thin wrappers that call these same two
+functions. Put a seam (a swappable slot) in front of the embedding model and in
+front of the Qdrant store, and hand the chosen pair in from outside rather than
+building them inside. The running app passes the real `e5-base` and real Qdrant;
+tests pass fast in-memory fakes.
 
 ## Alternatives Considered
 

@@ -39,15 +39,15 @@ tests must not reach into pypdf, the splitter, or the store directly.
 
 ## Acceptance criteria
 
-- [ ] Ingesting a small known PDF stores the expected number of Chunks; each
+- [x] Ingesting a small known PDF stores the expected number of Chunks; each
       Chunk has one page number and the correct document name and chunk index.
-- [ ] Chunks respect the ~800/150 size rule and no Chunk spans two pages.
-- [ ] The embedder is asked to embed stored text as passages.
-- [ ] Re-ingesting the same file does not double the Chunk count.
-- [ ] Re-ingesting a shorter edited file removes the old leftover Chunks.
-- [ ] A page with no extractable text produces no Chunks; a no-text PDF reports 0.
-- [ ] A missing file or non-PDF file raises a clear error before any work.
-- [ ] `ingest` returns the Chunk count and document name.
+- [x] Chunks respect the ~800/150 size rule and no Chunk spans two pages.
+- [x] The embedder is asked to embed stored text as passages.
+- [x] Re-ingesting the same file does not double the Chunk count.
+- [x] Re-ingesting a shorter edited file removes the old leftover Chunks.
+- [x] A page with no extractable text produces no Chunks; a no-text PDF reports 0.
+- [x] A missing file or non-PDF file raises a clear error before any work.
+- [x] `ingest` returns the Chunk count and document name.
 
 ## Blocked by
 

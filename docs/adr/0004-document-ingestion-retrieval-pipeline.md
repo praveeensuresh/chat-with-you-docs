@@ -21,8 +21,13 @@ vector, so changing them later means re-doing every document.
   questions get the `query: ` label.
 - Store each chunk in Qdrant (vector size 768, cosine distance) with a payload
   of: text, document name, page number, document id, chunk index.
-- The document id is the file name. The chunk id is fixed (document id + page +
-  chunk index). Every upload does delete-then-insert for that document id.
+- The document id is the file name. The chunk id is a fixed UUID5 derived from
+  the document id plus the chunk index. Qdrant only accepts an unsigned integer
+  or a UUID as a point id, so a plain text id such as `report.pdf:3` cannot be
+  used; deriving a UUID keeps the id stable across re-uploads and valid for
+  Qdrant. The page is not part of the id, because the chunk index already counts
+  across the whole document and cannot repeat. Every upload does delete-then-insert
+  for that document id.
 
 ## Alternatives Considered
 
@@ -43,6 +48,12 @@ vector, so changing them later means re-doing every document.
 - **Pros**: simplest.
 - **Cons**: re-uploading the same file duplicates its chunks.
 - **Why not**: fixed ids plus delete-then-insert avoid duplicates and leftovers.
+
+### Alternative 4: A plain text chunk id such as `report.pdf:3`
+- **Pros**: readable, and needs no derivation step.
+- **Cons**: Qdrant rejects it — point ids must be an unsigned integer or a UUID.
+- **Why not**: not possible in the chosen store. UUID5 keeps the same stability
+  with a valid id type.
 
 ## Consequences
 

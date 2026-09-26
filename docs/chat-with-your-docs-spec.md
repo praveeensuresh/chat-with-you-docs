@@ -6,6 +6,13 @@ Research basis: [Ticket 001 skill-gap map](001-skill-gap-map.md), last30days res
 Verification pass: 2026-08-08 (free-tier/pricing/memory claims re-checked against current sources;
 see corrections folded into §3 and §4 below).
 
+> **Parts of this plan were overtaken by later decisions.** Read the ADRs in
+> `docs/adr/` as the live record. Specifically: the backend deploy home is
+> Hugging Face Spaces, not Render or Streamlit Cloud (ADR-0006); the frontend is
+> Next.js, not Streamlit (ADR-0001); the answer step uses LangGraph, not a plain
+> chain (ADR-0007); and the embedding-host question, left open in §4, is settled
+> (ADR-0006). The rest of this plan still stands.
+
 ## 1. What this project is
 
 Upload your own documents (PDF, txt, markdown, docx). Chat with them. The agent answers

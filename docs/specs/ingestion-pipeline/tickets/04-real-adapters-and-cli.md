@@ -35,14 +35,14 @@ Config: reuse existing `Settings` values only.
 
 ## Acceptance criteria
 
-- [ ] `ingest <pdf>` against a real Qdrant loads the PDF and prints the Chunk
+- [x] `ingest <pdf>` against a real Qdrant loads the PDF and prints the Chunk
       count and document name.
-- [ ] `search "<question>"` prints hits with document name, page, and text, and
+- [x] `search "<question>"` prints hits with document name, page, and text, and
       `--top-k` controls the count.
-- [ ] `reset` wipes all Documents so a following search returns nothing.
-- [ ] Real Qdrant collection is created with vector size 768 and cosine
+- [x] `reset` wipes all Documents so a following search returns nothing.
+- [x] Real Qdrant collection is created with vector size 768 and cosine
       distance.
-- [ ] Real Embedder applies the `passage:` label on ingest and `query:` label
+- [x] Real Embedder applies the `passage:` label on ingest and `query:` label
       on search.
 
 ## Blocked by

@@ -40,4 +40,4 @@ model, and a separate Next.js frontend that calls it over HTTP.
 
 ### Risks
 - The backend needs a RAM-capable host, not Render free (512 MB). Mitigated by
-  deploying the backend on Hugging Face Spaces (see ADR-0003).
+  deploying the backend on Hugging Face Spaces (see ADR-0006).

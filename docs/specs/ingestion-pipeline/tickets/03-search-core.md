@@ -31,12 +31,12 @@ past the seam.
 
 ## Acceptance criteria
 
-- [ ] The embedder is asked to embed the question as a query.
-- [ ] Search over seeded Chunks returns hits that include document name, page,
+- [x] The embedder is asked to embed the question as a query.
+- [x] Search over seeded Chunks returns hits that include document name, page,
       text, and score, honouring `top_k`.
-- [ ] A `top_k` larger than the number of stored Chunks returns all available
+- [x] A `top_k` larger than the number of stored Chunks returns all available
       Chunks with no error.
-- [ ] A search that matches nothing returns an empty list.
+- [x] A search against an empty store returns an empty list.
 
 ## Blocked by
 

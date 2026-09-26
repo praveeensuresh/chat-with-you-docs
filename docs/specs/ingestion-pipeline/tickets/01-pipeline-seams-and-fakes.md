@@ -29,12 +29,12 @@ test fake is the second adapter (ADR-0005 rule).
 
 ## Acceptance criteria
 
-- [ ] Embedder seam exposes separate embed-passages and embed-query operations.
-- [ ] Vector-store seam exposes upsert, delete-by-document, search, clear.
-- [ ] Fake Embedder returns fixed-length deterministic vectors and records the
+- [x] Embedder seam exposes separate embed-passages and embed-query operations.
+- [x] Vector-store seam exposes upsert, delete-by-document, search, clear.
+- [x] Fake Embedder returns fixed-length deterministic vectors and records the
       operation name and raw text for each call.
-- [ ] Fake Vector-store performs in-memory nearest-match search and records calls.
-- [ ] A test proves the fakes record their calls and the fake store returns
+- [x] Fake Vector-store performs in-memory nearest-match search and records calls.
+- [x] A test proves the fakes record their calls and the fake store returns
       closest-first results.
 
 ## Blocked by

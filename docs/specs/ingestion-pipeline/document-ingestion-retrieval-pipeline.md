@@ -34,7 +34,7 @@ The real work lives in two functions, `ingest` and `search`. The command line is
 10. As a developer, I want to search a question and get back the closest Chunks, so that I can prove retrieval works.
 11. As a developer, I want each search result to show document name, page, and text, so that I can see the Citation.
 12. As a developer, I want to control how many results come back (top_k, default 5), so that I can tune the amount of context.
-13. As a developer, I want a search that matches nothing to return an empty result, so that the later Grounded-answer behavior has a clear signal to say "not found."
+13. As a developer, I want a search against an empty store to return an empty result, so that the later Grounded-answer behavior has a clear signal to say "not found." There is no minimum score, so once Documents are stored the closest Chunks always come back (ADR-0008).
 14. As a developer, I want a reset command that wipes all stored Documents, so that I can start clean between tests.
 15. As a developer, I want a clear error when I point ingest at a missing file or a non-PDF file, so that mistakes fail loudly instead of silently.
 16. As a developer, I want pages that contain no extractable text to produce no Chunks, so that empty pieces do not enter the store.
@@ -98,7 +98,7 @@ Test cases (all through `ingest` / `search`):
 - Re-ingest the same file: assert Chunk count does not double.
 - Re-ingest a shorter edited file: assert the old leftover Chunks are gone.
 - Search over seeded Chunks: assert the returned hits include document name and page, and honor top_k.
-- Search with no match: assert an empty result.
+- Search against an empty store: assert an empty result.
 - top_k larger than stored Chunks: assert all available Chunks return, no error.
 - Bad path / non-PDF: assert a clear error is raised.
 
